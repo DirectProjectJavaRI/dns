@@ -6,6 +6,28 @@
         Greg Meyer
         ---
 
+{6.0}
+
+    Changes included with release 6.0
+    
+    []
+    
+    Enhancements
+    
+ 	* Requires Java 8
+ 	
+ 	* Incorporation/Upgrade to Spring 5, SpringBoot 2.1, and SpringCloud Greenwich.
+ 	
+ 	* Move to using and configuring feign clients for communication with the config service.
+ 	
+ 	* Module is now a base module and does not include an executable project.  Actual server has moved to dns-sboot.
+
+    [] 
+     
+    Bug Fixes
+
+    * NA
+
 {2.0.1}
 
     Changes included with release 2.0.1
