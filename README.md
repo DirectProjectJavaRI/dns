@@ -15,6 +15,5 @@ This document describes how to implement and configure the Direct Project Java D
 
 
 Configuration is broken into two logical part: configuring the DNS specific protocol parameters and configuring/managing DNS records. The latter configuration may be dependent on the DNS hosting solution of the primary domain name.
-* [DNS Protocol Configuration](DNSProtConfig)
 * [DNS Record Configuration](DNSRecConfig)
 * [GoDaddy Domain Hosting](GoDaddy)
