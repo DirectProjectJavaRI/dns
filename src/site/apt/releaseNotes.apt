@@ -6,6 +6,22 @@
         Greg Meyer
         ---
 
+{6.0.1}
+
+    Changes included with release 6.0.1
+    
+    []
+    
+    Enhancements
+    
+ 	* Adding in support for TXT record types.
+
+    [] 
+     
+    Bug Fixes
+
+    * NA
+
 {6.0}
 
     Changes included with release 6.0
