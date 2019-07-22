@@ -135,6 +135,8 @@ public abstract class AbstractDNSStore implements DNSStore
         	case Type.SRV:
         	case Type.NS:
         	case Type.CNAME: 
+        	case Type.TXT:
+        	case Type.CAA:
         	{
         		try
         		{

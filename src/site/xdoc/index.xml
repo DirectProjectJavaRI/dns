@@ -15,14 +15,14 @@
                The DNS services implement a simple authoritative only DNS server for hosting DNS records for a Direct 
                messaging domain. It is intentionally tuned to handle only certain type of DNS records including CERT 
                type records as defined by the security and trust 
-               <a href="http://nhindirect.org/Content+Security+for+Simple+Health+Trans">specification.</a>              
+               <a href="http://wiki.directproject.org/w/images/e/e6/Applicability_Statement_for_Secure_Health_Transport_v1.2.pdf">specification.</a>              
             </p>
             <p>
                The server can be run as a stand alone application or may be deployed as an operating system service. 
             </p>           
             <p>
                For details on deploying and configuring the DNS server, see the DNS server 
-               <a href="users-guide/index.html">users guide.</a>                               
+               <a href="https://directprojectjavari.github.io/dns/">users guide.</a>                               
             </p> 
         </section>
     </body>

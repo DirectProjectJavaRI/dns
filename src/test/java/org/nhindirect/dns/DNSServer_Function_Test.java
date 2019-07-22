@@ -882,6 +882,96 @@ public class DNSServer_Function_Test extends SpringBaseTest
 	}
 
 	@Test
+	public void testQueryTXTRecord_AssertRecordsRetrieved() throws Exception
+	{
+		new TestPlan()
+		{
+			protected void addRecords() throws Exception
+			{
+				ArrayList<DNSRecord> recs = new ArrayList<>();
+				DNSRecord rec = DNSRecordUtil.createTXTRecord("domain.com", "ns.domain.com");
+				recs.add(rec);
+
+				rec = DNSRecordUtil.createTXTRecord("domain.com", "ns2.domain.com");
+				recs.add(rec);
+
+				rec = DNSRecordUtil.createTXTRecord("domain2.com", "ns.domain2.com");
+				recs.add(rec);
+
+				for (DNSRecord addRec : recs)
+					dnsService.addDNSRecord(addRec);
+
+			}
+
+			protected Collection<Query> getTestQueries() throws Exception
+			{
+				Collection<Query> queries = new ArrayList<Query>();
+				queries.add(new Query("domain.com", Type.TXT));
+
+				return queries;
+			}
+
+			protected void doAssertions(Collection<Record> records) throws Exception
+			{
+				assertNotNull(records);
+				assertEquals(2, records.size());
+
+
+				for (Record rec : records)
+				{
+					assertEquals(Type.TXT, rec.getType());
+					assertEquals("domain.com.", rec.getName().toString());
+				}
+			}
+		}.perform();
+	}
+	
+	@Test
+	public void testQueryCAARecord_AssertRecordsRetrieved() throws Exception
+	{
+		new TestPlan()
+		{
+			protected void addRecords() throws Exception
+			{
+				ArrayList<DNSRecord> recs = new ArrayList<>();
+				DNSRecord rec = DNSRecordUtil.createTXTRecord("domain.com", "ns.domain.com");
+				recs.add(rec);
+
+				rec = DNSRecordUtil.createTXTRecord("domain.com", "ns2.domain.com");
+				recs.add(rec);
+
+				rec = DNSRecordUtil.createTXTRecord("domain2.com", "ns.domain2.com");
+				recs.add(rec);
+
+				for (DNSRecord addRec : recs)
+					dnsService.addDNSRecord(addRec);
+
+			}
+
+			protected Collection<Query> getTestQueries() throws Exception
+			{
+				Collection<Query> queries = new ArrayList<Query>();
+				queries.add(new Query("domain.com", Type.TXT));
+
+				return queries;
+			}
+
+			protected void doAssertions(Collection<Record> records) throws Exception
+			{
+				assertNotNull(records);
+				assertEquals(2, records.size());
+
+
+				for (Record rec : records)
+				{
+					assertEquals(Type.TXT, rec.getType());
+					assertEquals("domain.com.", rec.getName().toString());
+				}
+			}
+		}.perform();
+	}	
+	
+	@Test
 	public void testQueryUnsupportedQueryType() throws Exception
 	{
 		new TestPlan()
