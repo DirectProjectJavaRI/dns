@@ -9,6 +9,7 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.nhindirect.config.store.DNSRecord;
 import org.nhindirect.config.store.util.DNSRecordUtils;
 import org.xbill.DNS.DClass;
@@ -16,6 +17,7 @@ import org.xbill.DNS.NSRecord;
 import org.xbill.DNS.CERTRecord;
 import org.xbill.DNS.CNAMERecord;
 import org.xbill.DNS.Name;
+import org.xbill.DNS.TXTRecord;
 
 public class DNSRecordUtil 
 {
@@ -106,6 +108,22 @@ public class DNSRecordUtil
 		return toDnsRecord(DNSRecord.fromWire(rec.toWireCanonical()));
 		
 	}	
+	
+	public static org.nhindirect.config.model.DNSRecord createTXTRecord(String name, String text) throws Exception
+	{
+		
+		if (!name.endsWith("."))
+			name = name + ".";
+		
+		if (StringUtils.isEmpty(text))
+			throw new IllegalArgumentException("Text cannot be empty.");
+		
+		TXTRecord rec = new TXTRecord(Name.fromString(name), DClass.IN, 300, text);
+		
+		return toDnsRecord(DNSRecord.fromWire(rec.toWireCanonical()));
+		
+	}	
+	
 	
 	public static Certificate parseRecord(CERTRecord r) 
 	{
