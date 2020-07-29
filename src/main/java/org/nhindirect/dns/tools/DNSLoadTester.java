@@ -307,29 +307,36 @@ public class DNSLoadTester implements CommandLineRunner
 
 	protected void computeRunningAverage()
 	{
-		long totalQueries = 0;
-		long totalFailedQueires = 0;
+		long totalCERTQueries = 0;
+		long totalMXQueries = 0;
+		long totalFailedMXQueires = 0;
+		long totalFailedCERTQueires = 0;
 		
         for(DNSLookupJob job : certLookupThreads)
         {
-        	totalQueries += job.getNumQueries();
-        	totalFailedQueires += job.getNumFailedQueries();
+        	totalCERTQueries += job.getNumQueries();
+        	totalFailedCERTQueires += job.getNumFailedQueries();
         }
         
         for(DNSLookupJob job : mxLookupThreads)
         {
-        	totalQueries += job.getNumQueries();
-        	totalFailedQueires += job.getNumFailedQueries();
+        	totalMXQueries += job.getNumQueries();
+        	totalFailedMXQueires += job.getNumFailedQueries();
         }
         
+        long totalQueries = totalCERTQueries + totalMXQueries;
         long elapsedTimeInSeconds = (System.currentTimeMillis() - startTime) / 1000;
         
         long avg = totalQueries / elapsedTimeInSeconds;
         
         System.out.println("Average queires per second: " + avg);
         System.out.println("\tTotal queires: " + totalQueries);
-        System.out.println("\tTotal failed queires: " + totalFailedQueires);
+        System.out.println("\t\tMX queires: " + totalMXQueries);
+        System.out.println("\t\tCERT queires: " + totalCERTQueries);
         
+
+        System.out.println("\r\n\tTotal MX failed queires: " + totalFailedMXQueires);        
+        System.out.println("\tTotal CERT failed queires: " + totalFailedCERTQueires);
 	}
 	
     private static void printUsage()
