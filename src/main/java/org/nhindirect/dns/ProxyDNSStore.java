@@ -19,13 +19,15 @@ package org.nhindirect.dns;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.time.Duration;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.xbill.DNS.ExtendedResolver;
 import org.xbill.DNS.Message;
 import org.xbill.DNS.ResolverConfig;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Proxy DNS store that delegates all requests to another set of DNS servers.
@@ -34,14 +36,13 @@ import org.xbill.DNS.ResolverConfig;
  *
  * @since 1.0
  */
+@Slf4j
 public class ProxyDNSStore implements DNSStore 
 {
 	private static final int DEFAULT_RESOLVER_PORT = 53;
 	
-	private final String[] servers;
+	private final Collection<String> servers;
 	private final int port;
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(ProxyDNSStore.class);	
 	
 	/**
 	 * Creates a default proxy store.
@@ -79,19 +80,13 @@ public class ProxyDNSStore implements DNSStore
 		if (servers == null || servers.size() == 0)
 		{
 
-			String[] configedServers = ResolverConfig.getCurrentConfig().servers();
+			this.servers = ResolverConfig.getCurrentConfig().servers().stream()
+					.map(addr -> addr.getHostString()).collect(Collectors.toList());
 			
-			if (configedServers != null)
-			{
-				this.servers = configedServers;
-			}	
-			else 
-				this.servers = null;
 		}
 		else
 		{
-			this.servers = new String[servers.size()];
-			servers.toArray(this.servers);
+			this.servers = servers;
 		}
 		
 		this.port = port;
@@ -136,18 +131,18 @@ public class ProxyDNSStore implements DNSStore
 	/*
 	 * Create the resolver that will do the DNS requests.
 	 */
-	private ExtendedResolver createExResolver(String[] servers, int port, int retries, int timeout)
+	private ExtendedResolver createExResolver(Collection<String> servers, int port, int retries, int timeout)
 	{
 		ExtendedResolver retVal = null;
 		try
 		{
-			retVal = new ExtendedResolver(servers);
+			retVal = new ExtendedResolver(servers.toArray(new String[servers.size()]));
 			retVal.setRetries(retries);
-			retVal.setTimeout(timeout);
+			retVal.setTimeout(Duration.ofSeconds(timeout));
 		}
 		catch (UnknownHostException e) 
 		{	
-			LOGGER.warn("Proxy store resolver could not be created: " + e.getMessage(), e);
+			log.warn("Proxy store resolver could not be created: " + e.getMessage(), e);
 		}
 		return retVal;
 	}

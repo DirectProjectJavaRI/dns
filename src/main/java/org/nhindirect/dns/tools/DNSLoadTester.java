@@ -1,10 +1,10 @@
 package org.nhindirect.dns.tools;
 
 import java.net.UnknownHostException;
+import java.time.Duration;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.apache.camel.spring.boot.CamelAutoConfiguration;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.CommandLineRunner;
@@ -14,8 +14,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
-import org.springframework.cloud.netflix.eureka.EurekaClientAutoConfiguration;
-import org.springframework.cloud.netflix.eureka.config.EurekaClientConfigServerAutoConfiguration;
 import org.xbill.DNS.Cache;
 import org.xbill.DNS.DClass;
 import org.xbill.DNS.ExtendedResolver;
@@ -26,9 +24,8 @@ import org.xbill.DNS.Resolver;
 import org.xbill.DNS.SimpleResolver;
 import org.xbill.DNS.Type;
 
-@SpringBootApplication
-@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class, EurekaClientConfigServerAutoConfiguration.class, 
-		EurekaClientAutoConfiguration.class, CamelAutoConfiguration.class})
+//@SpringBootApplication
+@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class})
 public class DNSLoadTester implements CommandLineRunner
 {
 	protected static final int DEFAULT_NUM_CERT_THREADS = 20;
@@ -199,13 +196,8 @@ public class DNSLoadTester implements CommandLineRunner
 	protected ExtendedResolver createExResolver(String[] servers, int retries, int timeout, boolean useTCP)
 	{
 		// create a default ExtendedResolver
-		ExtendedResolver extendedResolver;
-		try {
-			extendedResolver = new ExtendedResolver();
-		} catch (UnknownHostException e) 
-		{
-			throw new IllegalStateException("unable to create default ExtendedResolver", e);
-		}
+		final ExtendedResolver extendedResolver = new ExtendedResolver();
+
 
 		// remove all resolvers from default ExtendedResolver
 		Resolver[] resolvers = extendedResolver.getResolvers();
@@ -237,7 +229,7 @@ public class DNSLoadTester implements CommandLineRunner
 				}
 			}
 			extendedResolver.setRetries(retries);
-			extendedResolver.setTimeout(timeout);
+			extendedResolver.setTimeout(Duration.ofSeconds(timeout));
 			extendedResolver.setTCP(useTCP);
 		}
 

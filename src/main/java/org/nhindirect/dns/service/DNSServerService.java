@@ -26,9 +26,9 @@ import org.nhindirect.dns.DNSException;
 import org.nhindirect.dns.DNSServer;
 import org.nhindirect.dns.DNSServerSettings;
 import org.nhindirect.dns.DNSStore;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Service wrapper that instantiates and configures the DNS server.
@@ -36,6 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  *
  * @since 1.0
  */
+@Slf4j
 public class DNSServerService 
 {
 	@Autowired
@@ -43,8 +44,6 @@ public class DNSServerService
 	
 	@Autowired 
 	protected DNSServerSettings settings;
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(DNSServerService.class);	
 	
 	protected DNSServer server;
 
@@ -55,11 +54,11 @@ public class DNSServerService
 	
 	public void startServer() throws DNSException
 	{
-		LOGGER.info("Creating the DNSServer");
+		log.info("Creating the DNSServer");
 		
 		server = new DNSServer(dnsStore, settings);
 		
-		LOGGER.info("DNS Server created.  Starting server.");
+		log.info("DNS Server created.  Starting server.");
 		server.start();
 		
 		Runtime.getRuntime().addShutdownHook(new Thread() 
@@ -68,7 +67,7 @@ public class DNSServerService
 		    { 
 		    	try
 		    	{
-		    		LOGGER.info("Shutdown hook detected.  Intiate server shutdown.");
+		    		log.info("Shutdown hook detected.  Intiate server shutdown.");
 		    		stopService();
 		    	}
 		    	catch (DNSException e) {/* no-op */}
@@ -88,7 +87,7 @@ public class DNSServerService
 	{
 		if (server != null)
 		{
-			LOGGER.info("Shutting down DNS server.");
+			log.info("Shutting down DNS server.");
 			server.stop();
 		}
 
