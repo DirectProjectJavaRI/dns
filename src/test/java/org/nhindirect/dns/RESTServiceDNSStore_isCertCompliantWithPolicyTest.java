@@ -1,16 +1,18 @@
 package org.nhindirect.dns;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
+
+import org.junit.jupiter.api.Test;
 
 import java.security.cert.X509Certificate;
 
-import org.junit.Test;
 import org.nhindirect.config.model.CertPolicy;
 import org.nhindirect.dns.util.DNSRecordUtil;
 import org.nhindirect.policy.PolicyExpression;

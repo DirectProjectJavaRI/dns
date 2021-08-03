@@ -21,21 +21,20 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.Inet4Address;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.xbill.DNS.Message;
 import org.xbill.DNS.Rcode;
 import org.xbill.DNS.Section;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * UDP socket server that handled DNS requests over UDP.
  * @author Greg Meyer
  * @since 1.0
  */
+@Slf4j
 public class UDPServer extends DNSSocketServer  
 {
-	private static final Logger LOGGER = LoggerFactory.getLogger(UDPServer.class);	
-	
 	private static final int MAX_WIRE_SIZE = 512;
 	
 	
@@ -63,15 +62,15 @@ public class UDPServer extends DNSSocketServer
 	 */
 	public void start() throws DNSException
 	{
-		LOGGER.info("DNS UPD Server Starting");
+		log.info("DNS UPD Server Starting");
 		super.start();
 		
-		if (LOGGER.isInfoEnabled())
+		if (log.isInfoEnabled())
 		{
 			StringBuilder builder = new StringBuilder();
 			builder.append("DNS UDP Server Startup Complete\r\n\tBind Address: ").append(settings.getBindAddress());
 			builder.append("\r\n\tBind Port: ").append(settings.getPort());
-			LOGGER.info(builder.toString());
+			log.info(builder.toString());
 		}
 	}
 	
@@ -150,7 +149,7 @@ public class UDPServer extends DNSSocketServer
 					// unless it was closed
 					if (serverSock.isClosed() && running.get())
 					{
-						LOGGER.error("DNS UDP server socket dropped:" + e.getMessage());
+						log.error("DNS UDP server socket dropped:" + e.getMessage());
 						reconnect();
 					}
 				}
@@ -173,11 +172,11 @@ public class UDPServer extends DNSSocketServer
 			try
 			{
 				createServerSocket();
-				LOGGER.error("DNS UDP server socket re-established");
+				log.error("DNS UDP server socket re-established");
 			}
 			catch (DNSException ex)
 			{
-				LOGGER.error("DNS UDP server socket failed to rebind.  Trying again in 5 seconds.");
+				log.error("DNS UDP server socket failed to rebind.  Trying again in 5 seconds.");
 				
 				// the socket creation failed.... 
 				// sleep 5 seconds and come back around and try again
@@ -214,15 +213,15 @@ public class UDPServer extends DNSSocketServer
 				
 				try
 				{
-					//LOGGER.info("Got UDP DNS query.  Translating");
+					//log.info("Got UDP DNS query.  Translating");
 					query = responder.toMessage(inPacket.getData());
-					//LOGGER.info("Send UDP DNS query to service.");
+					//log.info("Send UDP DNS query to service.");
 					response = responder.processRequest(query);
-					//LOGGER.info("UDP query returned from config service");
+					//log.info("UDP query returned from config service");
 				}
 				catch (DNSException e) 
 				{
-					//LOGGER.info("Sending UDP error response");
+					//log.info("Sending UDP error response");
 					if (query != null)
 						response = responder.processError(query, e.getError());
 				}
@@ -232,7 +231,7 @@ public class UDPServer extends DNSSocketServer
 					if (response.getRcode() == Rcode.NOERROR || response.getRcode() == Rcode.NXDOMAIN)
 					{
 						++successCount;
-						if (response.getSectionArray(Section.ANSWER).length == 0)
+						if (response.getSection(Section.ANSWER).size() == 0)
 							++missCount;	
 					}
 					else
@@ -244,7 +243,7 @@ public class UDPServer extends DNSSocketServer
 							inPacket.getAddress(),
 							inPacket.getPort());
 					
-					//LOGGER.info("Sending UDP query valid response");
+					//log.info("Sending UDP query valid response");
 					serverSock.send(outPacket);
 				}
 				else
@@ -252,7 +251,7 @@ public class UDPServer extends DNSSocketServer
 			}
 			catch (IOException e)
 			{
-				LOGGER.error("Wire/connection protocol error handing DNS request: " + e.getMessage(), e);
+				log.error("Wire/connection protocol error handing DNS request: " + e.getMessage(), e);
 			}
 		}
 			

@@ -9,8 +9,6 @@ import java.util.Map;
 
 import org.nhindirect.policy.PolicyExpression;
 import org.nhindirect.policy.PolicyFilter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.xbill.DNS.DClass;
 import org.xbill.DNS.Flags;
 import org.xbill.DNS.Header;
@@ -24,9 +22,11 @@ import org.xbill.DNS.Record;
 import org.xbill.DNS.Section;
 import org.xbill.DNS.Type;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public abstract class AbstractDNSStore implements DNSStore
 {
-	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDNSStore.class);	
 	
 	protected static final String DNS_CERT_POLICY_NAME_VAR = "org.nhindirect.dns.CertPolicyName";
 	
@@ -75,11 +75,10 @@ public abstract class AbstractDNSStore implements DNSStore
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public Message get(Message request) throws DNSException
 	{
-		LOGGER.trace("get(Message) Entered");
+		log.trace("get(Message) Entered");
 		/* for testing time out cases
 		try
 		{
@@ -115,16 +114,16 @@ public abstract class AbstractDNSStore implements DNSStore
     	} catch(InvalidTypeException e) {
     	}
         
-    	if (LOGGER.isDebugEnabled())
+    	if (log.isDebugEnabled())
     	{
     		StringBuilder builder = new StringBuilder("Received Query Request:");
     		builder.append("\r\n\tName: " + name.toString());
     		builder.append("\r\n\tType: " + (typeString == null ? type : typeString));
     		builder.append("\r\n\tDClass: " + queryRecord.getDClass());
-    		LOGGER.debug(builder.toString());
+    		log.debug(builder.toString());
     	}
 
-    	LOGGER.info("Process record for DNS request type " + (typeString == null ? type : typeString) + " and name " + name.toString());
+    	log.info("Process record for DNS request type " + (typeString == null ? type : typeString) + " and name " + name.toString());
     	
     	Collection<Record> lookupRecords= null;
         switch (type)
@@ -144,10 +143,7 @@ public abstract class AbstractDNSStore implements DNSStore
         			
         			if (set != null)
         			{
-	        			lookupRecords = new ArrayList<Record>();
-	        			Iterator<Record> iter = set.rrs();
-	        			while (iter.hasNext())
-	        				lookupRecords.add(iter.next());
+	        			lookupRecords = set.rrs();
         			}
         			
         		}
@@ -163,10 +159,7 @@ public abstract class AbstractDNSStore implements DNSStore
     			
     			if (set != null)
     			{
-	    			lookupRecords = new ArrayList<Record>();
-	    			Iterator<Record> iter = set.rrs();
-	    			while (iter.hasNext())
-	    				lookupRecords.add(iter.next());
+	    			lookupRecords = set.rrs();
     			}
     			
         		break;
@@ -185,9 +178,7 @@ public abstract class AbstractDNSStore implements DNSStore
         			
         			if (certRecs != null)
         			{
-    	    			Iterator<Record> iter = certRecs.rrs();
-    	    			while (iter.hasNext())
-    	    				lookupRecords.add(iter.next());
+        				lookupRecords = certRecs.rrs();
         			}
         		}
  
@@ -195,7 +186,7 @@ public abstract class AbstractDNSStore implements DNSStore
         	}
         	default:
         	{
-        		LOGGER.debug("Query Type " + (typeString == null ? type : typeString) + " not implemented");
+        		log.debug("Query Type " + (typeString == null ? type : typeString) + " not implemented");
         		throw new DNSException(DNSError.newError(Rcode.NOTIMP), "Query Type " + (typeString == null ? type : typeString) + " not implemented"); 
         	}        	
         }
@@ -203,7 +194,7 @@ public abstract class AbstractDNSStore implements DNSStore
         
         if (lookupRecords == null || lookupRecords.size() == 0)
         {
-        	LOGGER.debug("No records found.");
+        	log.debug("No records found.");
         	return null;
         }
         	
@@ -225,7 +216,7 @@ public abstract class AbstractDNSStore implements DNSStore
     	if (soaRecord != null)
     		response.addRecord(soaRecord, Section.AUTHORITY);		
 		
-		LOGGER.trace("get(Message) Exit");
+		log.trace("get(Message) Exit");
 		
     	return response;
 	}
@@ -263,7 +254,7 @@ public abstract class AbstractDNSStore implements DNSStore
 		}
 		catch (Exception e)
 		{
-			LOGGER.warn("Error testing certificate for policy compliance.  Default to compliant.", e);
+			log.warn("Error testing certificate for policy compliance.  Default to compliant.", e);
 			return true;
 		}
 	}	

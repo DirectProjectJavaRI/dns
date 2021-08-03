@@ -19,13 +19,13 @@ package org.nhindirect.dns;
 
 import java.io.IOException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.xbill.DNS.Flags;
 import org.xbill.DNS.Header;
 import org.xbill.DNS.Message;
 import org.xbill.DNS.Rcode;
 import org.xbill.DNS.Section;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Abstract DNSResponder for DNS requests.  It implements common methods for calling the DNS store and handling error conditions.  Protocol specific
@@ -33,10 +33,9 @@ import org.xbill.DNS.Section;
  * @author Greg Meyer
  * @since 1.0
  */
+@Slf4j
 public abstract class DNSResponder
 {
-	private static final Logger LOGGER = LoggerFactory.getLogger(DNSResponder.class);	
-
 	protected DNSServerSettings settings;
 	protected DNSStore store;
 
@@ -116,7 +115,7 @@ public abstract class DNSResponder
 			// don't log as an error if it's just a non implemented query type
 			if (!e.getError().getError().equals(Rcode.NOTIMP))
 			{
-				LOGGER.error("Error processing DNS request: " + e.getMessage(), e);
+				log.error("Error processing DNS request: " + e.getMessage(), e);
 			}
 			response = processError(request, e.getError());
 		}

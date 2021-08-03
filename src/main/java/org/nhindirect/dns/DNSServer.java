@@ -37,8 +37,7 @@ import javax.management.openmbean.OpenDataException;
 import javax.management.openmbean.OpenType;
 import javax.management.openmbean.SimpleType;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 
 /**
@@ -49,10 +48,9 @@ import org.slf4j.LoggerFactory;
  * @author Greg Meyer
  * @since 1.0
  */
+@Slf4j
 public class DNSServer implements DNSServerMBean
 {	
-	private static final Logger LOGGER = LoggerFactory.getLogger(DNSServer.class);	
-	
 	private DNSResponder tcpResponder;
 	private DNSResponder updResponder;
 	private CompositeData settingsData;
@@ -71,7 +69,7 @@ public class DNSServer implements DNSServerMBean
 		}
 		catch (DNSException e)
 		{
-			LOGGER.error("Failed to create TCP responder: " + e.getLocalizedMessage(), e);
+			log.error("Failed to create TCP responder: " + e.getLocalizedMessage(), e);
 		}
 		
 		try
@@ -80,7 +78,7 @@ public class DNSServer implements DNSServerMBean
 		}
 		catch (DNSException e)
 		{
-			LOGGER.error("Failed to create UDP responder: " + e.getLocalizedMessage(), e);
+			log.error("Failed to create UDP responder: " + e.getLocalizedMessage(), e);
 		}
 
 		dnsStoreImplName = store.getClass().getName();
@@ -113,7 +111,7 @@ public class DNSServer implements DNSServerMBean
 		}
 		catch (OpenDataException e)
 		{
-			LOGGER.error("Failed to create settings composite type: " + e.getLocalizedMessage(), e);
+			log.error("Failed to create settings composite type: " + e.getLocalizedMessage(), e);
 			return;
 		}
 		 		
@@ -132,7 +130,7 @@ public class DNSServer implements DNSServerMBean
 		}
 		catch (JMException e)
 		{
-			LOGGER.error("Unable to register the DNSServer MBean", e);
+			log.error("Unable to register the DNSServer MBean", e);
 		}
 	}	
 	
@@ -172,14 +170,14 @@ public class DNSServer implements DNSServerMBean
 	@Override
 	public void startServer() 
 	{
-		LOGGER.info("Received request to start server.");
+		log.info("Received request to start server.");
 		try
 		{
 			start();
 		}
 		catch (DNSException e)
 		{
-			LOGGER.error("Failed to start server: " + e.getMessage(), e);
+			log.error("Failed to start server: " + e.getMessage(), e);
 		}
 	}
 
@@ -189,14 +187,14 @@ public class DNSServer implements DNSServerMBean
 	@Override
 	public void stopServer() 
 	{
-		LOGGER.info("Received request to stop server.");
+		log.info("Received request to stop server.");
 		try
 		{
 			stop();
 		}
 		catch (DNSException e)
 		{
-			LOGGER.error("Failed to stop server: " + e.getMessage(), e);
+			log.error("Failed to stop server: " + e.getMessage(), e);
 		}		
 	}
 	

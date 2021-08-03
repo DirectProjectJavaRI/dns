@@ -34,8 +34,7 @@ import javax.management.MBeanServer;
 import javax.management.ObjectName;
 import javax.management.StandardMBean;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 
 /**
@@ -44,10 +43,9 @@ import org.slf4j.LoggerFactory;
  * @author Greg Meyer
  * @since 1.0
  */
+@Slf4j
 public abstract class DNSSocketServer implements DNSSocketServerMBean
 {
-	private static final Logger LOGGER = LoggerFactory.getLogger(DNSSocketServer.class);	
-	
 	protected final DNSServerSettings settings;
 	protected final DNSResponder responder;
 	
@@ -95,7 +93,7 @@ public abstract class DNSSocketServer implements DNSSocketServerMBean
 		}
 		catch (JMException e)
 		{
-			LOGGER.error("Unable to register the DNSSocketServer MBean", e);
+			log.error("Unable to register the DNSSocketServer MBean", e);
 		}
 	}
 	
@@ -121,7 +119,7 @@ public abstract class DNSSocketServer implements DNSSocketServerMBean
 			serverStartTime = System.currentTimeMillis();
 		}
 		else
-			LOGGER.info("Start requested, but socket server is already running.");
+			log.info("Start requested, but socket server is already running.");
 	
 	}
 	
@@ -196,7 +194,7 @@ public abstract class DNSSocketServer implements DNSSocketServerMBean
 			}
 			catch (RejectedExecutionException e)
 			{   
-				LOGGER.warn("Rejecting DNS request: " + e.getMessage());
+				log.warn("Rejecting DNS request: " + e.getMessage());
 				/* no-op, but use logic below to indicate that it was rejected */
 			}
 		}

@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>dns</artifactId>    
     <name>Direct Project DNS services</name>
-    <version>6.0.1</version>
+    <version>8.0.0</version>
     <description>Direct Project DNS services</description>
     <inceptionYear>2010</inceptionYear>
     <url>https://github.com/DirectProjectJavaRI/dns</url> 
@@ -27,14 +27,19 @@
 		<connection>scm:git:https://github.com/DirectProjectJavaRI/dns.git</connection>
 	</scm>
     <prerequisites>
-        <maven>3.0.0</maven>
+        <maven>3.5.0</maven>
     </prerequisites>  	
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-	   <version>2.1.6.RELEASE</version>   
+	    <version>2.5.2</version>   
 		<relativePath />
-	</parent>		
+	</parent>	
+    <properties>
+      <dnsjava.version>3.3.1</dnsjava.version> 
+      <mina-core.version>2.1.4</mina-core.version>
+      <bcprov-jdk15on.version>1.68</bcprov-jdk15on.version>
+    </properties>  		
     <licenses>
       <license>
          <name>New BSD License</name>
@@ -46,116 +51,81 @@
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-dependencies</artifactId>
-				<version>2.1.6.RELEASE</version> 
+				<version>2.5.2</version> 
 				<type>pom</type>
 				<scope>import</scope>
-			</dependency>
-	        <dependency>
-	            <groupId>io.pivotal.spring.cloud</groupId>
-	            <artifactId>spring-cloud-services-dependencies</artifactId>
-	            <version>2.1.1.RELEASE</version>
-	            <type>pom</type>
-	            <scope>import</scope>
-	        </dependency>				
+			</dependency>		
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-starter-parent</artifactId>
-				 <version>Greenwich.SR1</version>
+				 <version>2020.0.3</version>
 				<type>pom</type>
 				<scope>import</scope>		
 			</dependency>											
 		</dependencies>
 	</dependencyManagement>			     
     <dependencies>    
-	    <dependency>
-	        <groupId>org.springframework.boot</groupId>
-	        <artifactId>spring-boot-configuration-processor</artifactId>
-	    </dependency>  
 		<dependency>
-  			<groupId>org.springframework.boot</groupId>
-  			<artifactId>spring-boot-starter-actuator</artifactId>
-		</dependency>	
-	    <dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-config</artifactId>			
-		</dependency>	
-	    <dependency>
-	        <groupId>org.springframework.cloud</groupId>
-	        <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-	    </dependency>	
-	    <dependency>
-	      <groupId>io.pivotal.spring.cloud</groupId>
-	      <artifactId>spring-cloud-services-starter-config-client</artifactId>
-		  <exclusions>
-		        <exclusion>
-		            <groupId>org.codehaus.jackson</groupId>
-		            <artifactId>jackson-mapper-asl</artifactId>
-		        </exclusion>
-		  </exclusions>		      
-	    </dependency>		    		 		              
+		    <groupId>org.springframework.cloud</groupId>
+		    <artifactId>spring-cloud-starter-bootstrap</artifactId>
+		</dependency>				    		 		              
 		  <dependency>
 		    <groupId>org.bouncycastle</groupId>
 		    <artifactId>bcprov-jdk15on</artifactId>
-		    <version>1.60</version>    
+		    <version>${bcprov-jdk15on.version}</version>    
 		  </dependency> 
 		<dependency>
 		    <groupId>dnsjava</groupId>
 		    <artifactId>dnsjava</artifactId>
-		    <version>2.1.8</version>	    
+		    <version>${dnsjava.version}</version>	    
 		</dependency>	
 		<dependency>
 		    <groupId>org.nhind</groupId>
 		    <artifactId>config-service-client</artifactId>
-		    <version>6.0</version>  	     
+		    <version>8.0.0</version>  	     
 		</dependency>	
 		<dependency>
 		    <groupId>org.nhind</groupId>
+		    <artifactId>config-model</artifactId>
+		    <version>8.0.0</version>  	     
+		</dependency>			
+		<dependency>
+		    <groupId>org.nhind</groupId>
 		    <artifactId>direct-policy</artifactId>
-		    <version>6.0</version>   
+		    <version>8.0.0</version>   
 		</dependency>	
 		<dependency>
 		    <groupId>org.nhind</groupId>
 		    <artifactId>direct-common</artifactId>
-		    <version>6.0.1</version>   
+		    <version>8.0.0</version>   
 		</dependency>						
 		<dependency>
 		    <groupId>org.nhind</groupId>
 		    <artifactId>config-service-jar</artifactId>
-		    <version>6.0.3</version>  
+		    <version>8.0.0</version>  
 			<scope>test</scope>		     
 		</dependency>		
 		<dependency>
 		    <groupId>org.apache.mina</groupId>
 		    <artifactId>mina-core</artifactId>
-		    <version>1.0.2</version>
+		    <version>${mina-core.version}</version>
 		    <scope>test</scope>	    
-		</dependency>	
-        <dependency>
-          <groupId>org.mockito</groupId>
-          <artifactId>mockito-core</artifactId>
-          <scope>test</scope>
-        </dependency>			
-	    <dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>  	
+		</dependency>	 	
 		<dependency>
 		    <groupId>com.h2database</groupId>
 		    <artifactId>h2</artifactId>
 		    <scope>test</scope>
 		</dependency>
-		<dependency>
+	    <dependency>
+	       <groupId>io.r2dbc</groupId>
+	       <artifactId>r2dbc-h2</artifactId>
+	       <scope>test</scope>
+	    </dependency>
+	    <dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-test</artifactId>
 		    <scope>test</scope>
-		</dependency>			
-		<dependency>
-		    <groupId>org.apache.camel</groupId>
-		    <artifactId>camel-spring-boot-starter</artifactId>
-		    <version>2.22.0</version>
-		    <scope>test</scope>		    
-		</dependency>																																																																																															
+		</dependency>																																																																																																	
   </dependencies>      
   <build>
   	<extensions>
@@ -201,6 +171,7 @@
 	<plugin>
 		<groupId>org.apache.maven.plugins</groupId>
 		<artifactId>maven-jxr-plugin</artifactId>
+		<version>3.1.1</version>
 	</plugin>   	
 	<plugin>
 		<groupId>org.apache.maven.plugins</groupId>
@@ -233,35 +204,28 @@
           </execution>
         </executions>
       </plugin>    	    
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jar-plugin</artifactId>
-            <configuration>
-               <archive>
-                  <index>true</index>
-                  <!--<manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
--->
-               </archive>
-            </configuration>
-         </plugin>
-         <plugin>
-       <groupId>org.apache.maven.plugins</groupId>
-       <artifactId>maven-jar-plugin</artifactId>
-       <executions>
-         <execution>
-           <goals>
-             <goal>test-jar</goal>
-           </goals>
-         </execution>
-       </executions>
-     </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+          <configuration>
+             <archive>
+                <index>true</index>
+             </archive>
+          </configuration>       
+          <executions>
+            <execution>
+              <goals>
+                <goal>test-jar</goal>
+              </goals>
+            </execution>
+          </executions>
+       </plugin> 
  	
 	     <plugin>
 	      	<groupId>org.apache.maven.plugins</groupId> 
 	        <artifactId>maven-javadoc-plugin</artifactId>
-	        <version>2.9.1</version>
-		        <configuration>
-			    <additionalparam>-Xdoclint:none</additionalparam>
+		    <configuration>
+			    <additionalJOption>-Xdoclint:none</additionalJOption>
 				<charset>UTF-8</charset>
 				<docencoding>UTF-8</docencoding>
 				<docfilessubdirs>true</docfilessubdirs>
@@ -296,6 +260,7 @@
                      </goals>
               </execution>
             </executions>
+            <version>3.0.1</version>
         </plugin>	    
     	 -->		    
     </plugins>	    
@@ -305,14 +270,12 @@
           <plugin>
              <groupId>org.apache.maven.plugins</groupId>
              <artifactId>maven-project-info-reports-plugin</artifactId>
-             <version>2.9</version>
           </plugin>   
 	      <plugin>
 	      	<groupId>org.apache.maven.plugins</groupId> 
 	        <artifactId>maven-javadoc-plugin</artifactId>
-	        <version>2.9.1</version>
-		        <configuration>
-			    <additionalparam>-Xdoclint:none</additionalparam>
+		    <configuration>
+			    <additionalJOption>-Xdoclint:none</additionalJOption>
 				<charset>UTF-8</charset>
 				<docencoding>UTF-8</docencoding>
 				<docfilessubdirs>true</docfilessubdirs>

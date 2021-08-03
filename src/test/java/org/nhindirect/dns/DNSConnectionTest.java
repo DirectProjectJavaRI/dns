@@ -1,10 +1,14 @@
 package org.nhindirect.dns;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import static org.junit.Assert.assertNotNull;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 import org.apache.mina.util.AvailablePortFinder;
-import org.junit.Test;
 import org.nhindirect.dns.util.IPUtils;
 import org.xbill.DNS.Cache;
 import org.xbill.DNS.DClass;
@@ -18,7 +22,7 @@ import org.xbill.DNS.Type;
 
 public class DNSConnectionTest
 {
-	private static String[] servers;
+	private static Collection<String> servers;
 	private static int recType = Type.A;
 	private static String lookupRec;
 	private static boolean useTCP = false;
@@ -69,7 +73,7 @@ public class DNSConnectionTest
                     System.err.println("Error: Missing server list.");
                     System.exit(-1);
                 }                
-                servers = argv[++i].split(",");                
+                servers = Arrays.asList(argv[++i].split(","));               
             }
             else if (arg.equals("-type"))
             {
@@ -130,8 +134,9 @@ public class DNSConnectionTest
 		Cache ch = Lookup.getDefaultCache(DClass.IN);
 		ch.clearCache();
 		
-		if (servers == null || servers.length == 0)
-			servers = ResolverConfig.getCurrentConfig().servers();
+		if (servers == null || servers.size() == 0)
+			servers = ResolverConfig.getCurrentConfig().servers().stream()
+				.map(addr -> addr.getHostString()).collect(Collectors.toList());
 		
 		System.out.println("\r\nConfigure DNS resolvers:");
 		for (String server : servers)
@@ -142,7 +147,7 @@ public class DNSConnectionTest
 		System.out.println("\r\nLookup up record " + lookupRec);
 		
 		Lookup lu = new Lookup(new Name(lookupRec), recType);
-		ExtendedResolver resolver = new ExtendedResolver(servers);
+		ExtendedResolver resolver = new ExtendedResolver(servers.toArray(new String[servers.size()]));
 		resolver.setTCP(useTCP);
 		lu.setResolver(resolver);
 	

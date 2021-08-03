@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.HashMap;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.nhind.config.rest.CertificateService;
 import org.nhind.config.rest.DNSService;
 import org.nhind.config.rest.CertPolicyService;
@@ -23,8 +23,6 @@ import org.nhindirect.policy.PolicyFilterFactory;
 import org.nhindirect.policy.PolicyLexiconParser;
 import org.nhindirect.policy.PolicyLexiconParserFactory;
 import org.nhindirect.policy.x509.SignatureAlgorithmIdentifier;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.xbill.DNS.CERTRecord;
 import org.xbill.DNS.DClass;
 import org.xbill.DNS.Name;
@@ -33,10 +31,11 @@ import org.xbill.DNS.Rcode;
 import org.xbill.DNS.Record;
 import org.xbill.DNS.Type;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class RESTServiceDNSStore extends AbstractDNSStore
 {
-	private static final Logger LOGGER = LoggerFactory.getLogger(RESTServiceDNSStore.class);	
-	
 	protected final CertificateService certService;
 	protected final CertPolicyService certPolicyService;
 	protected final DNSService dnsService;
@@ -89,14 +88,14 @@ public class RESTServiceDNSStore extends AbstractDNSStore
 		if (!StringUtils.isEmpty(certPolicyName))
 		{
 			InputStream inStream = null;
-			LOGGER.info("Certificate policy name " + certPolicyName + " has been configured.");
+			log.info("Certificate policy name " + certPolicyName + " has been configured.");
 			try
 			{
 				// get the policy by name
 				final org.nhindirect.config.model.CertPolicy policy = certPolicyService.getPolicyByName(certPolicyName);
 				if (policy == null)
 				{
-					LOGGER.warn("Certificate policy " + certPolicyName + " could not be found in the system.  Falling back to no policy.");
+					log.warn("Certificate policy " + certPolicyName + " could not be found in the system.  Falling back to no policy.");
 					return;
 				}
 				
@@ -113,7 +112,7 @@ public class RESTServiceDNSStore extends AbstractDNSStore
 			{
 				// it's OK if can't find the certificate policy that was configured, we'll just log a warning
 				// it's also OK if we can't download or parse the policy, but we need to log the error
-				LOGGER.warn("Error loading and compling certificate policy " + certPolicyName + ".  Will fallback to no policy filter.", e);
+				log.warn("Error loading and compling certificate policy " + certPolicyName + ".  Will fallback to no policy filter.", e);
 			}
 			finally
 			{
@@ -121,7 +120,7 @@ public class RESTServiceDNSStore extends AbstractDNSStore
 			}
 		}
 		else
-			LOGGER.info("No certificate policy has been configured.");
+			log.info("No certificate policy has been configured.");
 	}	
 	
 	/**
@@ -272,7 +271,7 @@ public class RESTServiceDNSStore extends AbstractDNSStore
 				{
 					// need to convert to cert container because this might be 
 					// a certificate with wrapped private key data
-					final CertUtils.CertContainer cont =  CertUtils.toCertContainer(cert.getData());
+					final CertUtils.CertContainer cont =  CertUtils.toCertContainer(cert.getData(), false);
 					xCert = cont.getCert();
 					// check if this is a compliant certificate with the configured policy... if not, move on
 					if (!isCertCompliantWithPolicy(xCert))
@@ -324,7 +323,10 @@ public class RESTServiceDNSStore extends AbstractDNSStore
 					}
 				}
 				
-				CERTRecord rec = new CERTRecord(Name.fromString(name), DClass.IN, 86400L, certRecordType, keyTag, 
+				/*
+				 * 30 minute cache for certificates
+				 */
+				CERTRecord rec = new CERTRecord(Name.fromString(name), DClass.IN, 1800L, certRecordType, keyTag, 
 						alg /*public key alg, RFC 4034*/, retData);
 				
 				retVal.addRR(rec);
@@ -371,7 +373,7 @@ public class RESTServiceDNSStore extends AbstractDNSStore
     		}
     		catch (Exception e)
     		{
-    			LOGGER.error("Failed to load SOA records from config service.");    			
+    			log.error("Failed to load SOA records from config service.");    			
     		}
     	}
     	

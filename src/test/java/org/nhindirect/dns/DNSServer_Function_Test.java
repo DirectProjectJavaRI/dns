@@ -1,16 +1,17 @@
 package org.nhindirect.dns;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import org.junit.jupiter.api.Test;
 
 import java.security.cert.X509Certificate;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.junit.Test;
 import org.nhindirect.common.crypto.CryptoExtensions;
 import org.nhindirect.config.model.CertPolicy;
 import org.nhindirect.config.model.Certificate;
@@ -78,7 +79,7 @@ public class DNSServer_Function_Test extends SpringBaseTest
 		protected void performInner() throws Exception
 		{
 			ExtendedResolver resolver = new ExtendedResolver(IPUtils.getDNSLocalIps());
-			resolver.setTimeout(300);
+			resolver.setTimeout(Duration.ofSeconds(300));
 
 			resolver.setTCP(true);
 			resolver.setPort(settings.getPort());
@@ -508,9 +509,9 @@ public class DNSServer_Function_Test extends SpringBaseTest
 					X509Certificate cert = (X509Certificate)DNSRecordUtil.parseRecord((CERTRecord)record);
 					assertNotNull(cert);
 
-					if (CryptoExtensions.getSubjectAddress(cert).equals("gm2552@securehealthemail.com"))
+					if (cert.getSubjectDN().toString().contains("gm2552@securehealthemail.com"))
 						foundGreg = true;
-					else if (CryptoExtensions.getSubjectAddress(cert).equals("ryan@securehealthemail.com"))
+					else if (cert.getSubjectDN().toString().contains("ryan@securehealthemail.com"))
 						foundRyan = true;
 				}
 
