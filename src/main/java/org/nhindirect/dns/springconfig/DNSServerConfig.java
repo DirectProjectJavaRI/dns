@@ -16,6 +16,9 @@ public class DNSServerConfig
 	@Value("${direct.dns.binding.address:0.0.0.0}")
 	protected String bindAddress;
 	
+	@Value("${direct.dns.binding.maxReconnectAttempts:10}")
+	protected int maxReconnectAttempts;
+	
 	@Bean
 	@ConditionalOnMissingBean
 	public DNSServerSettings dnsServerSettings()
@@ -23,6 +26,7 @@ public class DNSServerConfig
 		final DNSServerSettings settings = new DNSServerSettings();
 		settings.setBindAddress(bindAddress);
 		settings.setPort(port);
+		settings.setMaxReconnectAttempts(maxReconnectAttempts);
 		
 		return settings;
 	}
