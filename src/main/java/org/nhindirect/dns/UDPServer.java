@@ -166,6 +166,7 @@ public class UDPServer extends DNSSocketServer
 		// socket may already be closed, but clean up to be thorough.
 		serverSock.close();
 		
+		int numAttempts = 0;
 		serverSock = null;
 		while (serverSock == null && running.get())
 		{	
@@ -176,6 +177,13 @@ public class UDPServer extends DNSSocketServer
 			}
 			catch (DNSException ex)
 			{
+				++numAttempts;
+				if (numAttempts > settings.getMaxReconnectAttempts())
+				{
+					log.error("Maximum number of UDP rebinds has been exceeded.  The DNS server will terminate");
+					System.exit(-1);
+				}
+				
 				log.error("DNS UDP server socket failed to rebind.  Trying again in 5 seconds.");
 				
 				// the socket creation failed.... 

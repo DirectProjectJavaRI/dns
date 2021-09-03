@@ -32,10 +32,13 @@ public class DNSServerSettings extends SocketServerSettings
 	private static final int DEFAULT_PORT = 53;
 	private static final String DEFAULT_BIND_ADDRESS = "0.0.0.0"; // bind to all adapters
 	public  static final int DAFAULT_MAX_REQUEST_SIZE = 1024 * 16;
+	public  static final int DAFAULT_MAX_RECONNECT_ATTEMPTS = 10;
+	
 	
 	private int port;
 	private String bindAddress;
 	private int maxRequestSize;
+	private int maxReconnectAttempts;
 	
 	/**
 	 * Create default DNS server settings
@@ -46,6 +49,7 @@ public class DNSServerSettings extends SocketServerSettings
 		port = DEFAULT_PORT;
 		bindAddress = DEFAULT_BIND_ADDRESS;
 		maxRequestSize = DAFAULT_MAX_REQUEST_SIZE;
+		maxReconnectAttempts = DAFAULT_MAX_RECONNECT_ATTEMPTS;
 	}
 
 	/**
@@ -102,5 +106,27 @@ public class DNSServerSettings extends SocketServerSettings
 	public void setMaxRequestSize(int maxRequestSize)
 	{
 		this.maxRequestSize = maxRequestSize;
+	}
+	/**
+	 * Gets the maximum number of times the service will attempt to reconnect
+	 * to the underlying IP stack if association is lost.
+	 * 
+	 * @return The maximum number of times the service will attempt to reconnect
+	 * to the underlying IP stack
+	 */
+	public int getMaxReconnectAttempts()
+	{
+		return maxReconnectAttempts;
+	}
+	
+	/**
+	 * Sets the maximum number of times the service will attempt to reconnect
+	 * to the underlying IP stack if association is lost.
+	 * @param maxReconnectAttempts the maximum number of times the service will attempt to reconnect
+	 * to the underlying IP stack
+	 */
+	public void setMaxReconnectAttempts(int maxReconnectAttempts)
+	{
+		this.maxReconnectAttempts = maxReconnectAttempts;
 	}
 }

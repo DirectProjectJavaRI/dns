@@ -167,6 +167,7 @@ public class TCPServer extends DNSSocketServer
 			serverSocket.close();
 		} catch (IOException e) {/* no-op */}
 		
+		int numAttempts = 0;
 		serverSocket = null;
 		while (serverSocket == null && running.get())
 		{	
@@ -177,6 +178,13 @@ public class TCPServer extends DNSSocketServer
 			}
 			catch (DNSException ex)
 			{
+				++numAttempts;
+				if (numAttempts > settings.getMaxReconnectAttempts())
+				{
+					log.error("Maximum number of TCP rebinds has been exceeded.  The DNS server will terminate");
+					System.exit(-1);
+				}
+				
 				log.error("DNS TCP server socket failed to rebind.  Trying again in 5 seconds.");
 				
 				// the socket creation failed.... 
