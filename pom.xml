@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>dns</artifactId>    
     <name>Direct Project DNS services</name>
-    <version>8.0.1</version>
+    <version>8.1.0</version>
     <description>Direct Project DNS services</description>
     <inceptionYear>2010</inceptionYear>
     <url>https://github.com/DirectProjectJavaRI/dns</url> 
@@ -68,12 +68,21 @@
 		<dependency>
 		    <groupId>org.springframework.cloud</groupId>
 		    <artifactId>spring-cloud-starter-bootstrap</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.bouncycastle</groupId>
+					<artifactId>bcprov-jdk15on</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.bouncycastle</groupId>
+					<artifactId>bcmail-jdk15on</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.bouncycastle</groupId>
+					<artifactId>bcpkix-jdk15on</artifactId>
+				</exclusion>
+			</exclusions>		    
 		</dependency>				    		 		              
-		  <dependency>
-		    <groupId>org.bouncycastle</groupId>
-		    <artifactId>bcprov-jdk15on</artifactId>
-		    <version>${bcprov-jdk15on.version}</version>    
-		  </dependency> 
 		<dependency>
 		    <groupId>dnsjava</groupId>
 		    <artifactId>dnsjava</artifactId>
@@ -82,27 +91,17 @@
 		<dependency>
 		    <groupId>org.nhind</groupId>
 		    <artifactId>config-service-client</artifactId>
-		    <version>8.0.0</version>  	     
-		</dependency>	
-		<dependency>
-		    <groupId>org.nhind</groupId>
-		    <artifactId>config-model</artifactId>
-		    <version>8.0.0</version>  	     
-		</dependency>			
+		    <version>8.1.0</version>  	     
+		</dependency>				
 		<dependency>
 		    <groupId>org.nhind</groupId>
 		    <artifactId>direct-policy</artifactId>
-		    <version>8.0.0</version>   
-		</dependency>	
-		<dependency>
-		    <groupId>org.nhind</groupId>
-		    <artifactId>direct-common</artifactId>
-		    <version>8.0.0</version>   
-		</dependency>						
+		    <version>8.1.0</version>  	
+		</dependency>					
 		<dependency>
 		    <groupId>org.nhind</groupId>
 		    <artifactId>config-service-jar</artifactId>
-		    <version>8.0.0</version>  
+		    <version>8.1.0</version>  	
 			<scope>test</scope>		     
 		</dependency>		
 		<dependency>
@@ -262,7 +261,16 @@
             </executions>
             <version>3.0.1</version>
         </plugin>	    
-    	 -->		    
+    	 -->	
+        <plugin>
+          <groupId>org.sonatype.central</groupId>
+          <artifactId>central-publishing-maven-plugin</artifactId>
+          <version>0.8.0</version>
+          <extensions>true</extensions>
+          <configuration>
+            <publishingServerId>central</publishingServerId>
+          </configuration>
+        </plugin>    
     </plugins>	    
   </build>                        
   <reporting>
@@ -325,23 +333,4 @@
 	        </plugin>	                   
 		</plugins>
   </reporting>
-  <distributionManagement>
-    <site>
-      <id>nhind-site</id>
-      <name>NHIN Direct API publication site</name>
-      <url>sftp://api.nhindirect.org/x/www/api.nhindirect.org/java/site/dns/${project.version}</url>
-    </site>
-    <snapshotRepository>
-        <id>sonatype-snapshot</id>
-        <name>Sonatype OSS Maven SNAPSHOT Repository</name>
-        <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-        <uniqueVersion>false</uniqueVersion>
-     </snapshotRepository>
-     <repository>
-        <id>sonatype-release</id>
-        <name>Sonatype OSS Maven Release Repositor</name>
-        <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        <uniqueVersion>false</uniqueVersion>
-     </repository>		    
-  </distributionManagement>
 </project>
