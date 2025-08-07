@@ -1,0 +1,2 @@
+org.nhindirect.dns.autoconfig.DNSServerAutoConfiguration
+org.nhindirect.dns.autoconfig.DNSStoreAutoConfiguration

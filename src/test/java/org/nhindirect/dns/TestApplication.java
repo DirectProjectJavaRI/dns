@@ -6,16 +6,12 @@ import org.springframework.boot.autoconfigure.http.HttpMessageConvertersAutoConf
 import org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 
 @SpringBootApplication(exclude= {SecurityAutoConfiguration.class, 
 		ReactiveSecurityAutoConfiguration.class})
-@EnableFeignClients({"org.nhind.config.rest.feign"})
-@ComponentScan({"org.nhindirect.config", "org.nhindirect.dns"})
-@EnableR2dbcRepositories("org.nhindirect.config.repository")
+@ComponentScan({"org.nhindirect.config"})
 @Import(HttpMessageConvertersAutoConfiguration.class)
 public class TestApplication
 {

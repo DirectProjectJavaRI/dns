@@ -509,9 +509,9 @@ public class DNSServer_Function_Test extends SpringBaseTest
 					X509Certificate cert = (X509Certificate)DNSRecordUtil.parseRecord((CERTRecord)record);
 					assertNotNull(cert);
 
-					if (cert.getSubjectDN().toString().contains("gm2552@securehealthemail.com"))
+					if (cert.getSubjectX500Principal().toString().contains("gm2552@securehealthemail.com"))
 						foundGreg = true;
-					else if (cert.getSubjectDN().toString().contains("ryan@securehealthemail.com"))
+					else if (cert.getSubjectX500Principal().toString().contains("ryan@securehealthemail.com"))
 						foundRyan = true;
 				}
 

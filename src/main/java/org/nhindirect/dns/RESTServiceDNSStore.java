@@ -81,7 +81,6 @@ public class RESTServiceDNSStore extends AbstractDNSStore
 	/**
 	 * Checks to see if a certificate policy has been configured.
 	 */
-	@SuppressWarnings("deprecation")
 	protected void configCertPolicy() throws DNSException
 	{
 		// check to see if there is a certificate policy set
