@@ -32,11 +32,11 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-	    <version>3.5.0</version>   
+	    <version>4.0.1</version>   
 		<relativePath />
 	</parent>	
     <properties>
-      <mina-core.version>2.2.4</mina-core.version>
+      <mina-core.version>2.2.5</mina-core.version>
     </properties>  		
     <licenses>
       <license>
@@ -48,14 +48,18 @@
 		<dependencies>												
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-starter-parent</artifactId>
-				 <version>2025.0.0</version>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				 <version>2025.1.0</version>
 				<type>pom</type>
 				<scope>import</scope>		
 			</dependency>											
 		</dependencies>
 	</dependencyManagement>			     
     <dependencies>    
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>  	        
 		<dependency>
 		    <groupId>org.springframework.cloud</groupId>
 		    <artifactId>spring-cloud-starter-bootstrap</artifactId>
@@ -106,7 +110,12 @@
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-test</artifactId>
 		    <scope>test</scope>
-		</dependency>																																																																																																	
+		</dependency>	
+	    <dependency>
+	    	<groupId>org.springframework.boot</groupId>
+	    	<artifactId>spring-boot-starter-security</artifactId>
+	    	<scope>test</scope>
+	    </dependency>																																																																																																			
   </dependencies>      
   <build>
   	<extensions>
