@@ -10,10 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.xbill.DNS.Cache;
 import org.xbill.DNS.DClass;
 import org.xbill.DNS.ExtendedResolver;
@@ -25,7 +21,6 @@ import org.xbill.DNS.SimpleResolver;
 import org.xbill.DNS.Type;
 
 //@SpringBootApplication
-@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class})
 public class DNSLoadTester implements CommandLineRunner
 {
 	protected static final int DEFAULT_NUM_CERT_THREADS = 20;

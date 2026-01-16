@@ -1,14 +1,14 @@
-package org.nhindirect.dns.springconfig;
+package org.nhindirect.dns.autoconfig;
 
 import org.nhindirect.dns.DNSServerSettings;
 import org.nhindirect.dns.service.DNSServerService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
-public class DNSServerConfig
+@AutoConfiguration
+public class DNSServerAutoConfiguration
 {
 	@Value("${direct.dns.binding.port:53}")
 	protected int port;
@@ -21,7 +21,7 @@ public class DNSServerConfig
 	
 	@Bean
 	@ConditionalOnMissingBean
-	public DNSServerSettings dnsServerSettings()
+	DNSServerSettings dnsServerSettings()
 	{
 		final DNSServerSettings settings = new DNSServerSettings();
 		settings.setBindAddress(bindAddress);
@@ -33,7 +33,7 @@ public class DNSServerConfig
 	
 	@Bean(destroyMethod="stopService")
 	@ConditionalOnMissingBean
-	public DNSServerService dnsServerService()
+	DNSServerService dnsServerService()
 	{
 		return new DNSServerService();
 	}
