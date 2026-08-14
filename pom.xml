@@ -2,9 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd ">
     <groupId>org.nhind</groupId>    
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>dns</artifactId>    
+    <artifactId>dns</artifactId>
     <name>Direct Project DNS services</name>
-    <version>8.1.0</version>
+    <version>9.0.0</version>
     <description>Direct Project DNS services</description>
     <inceptionYear>2010</inceptionYear>
     <url>https://github.com/DirectProjectJavaRI/dns</url> 
@@ -32,13 +32,11 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-	    <version>2.5.2</version>   
+	    <version>4.1.0</version>
 		<relativePath />
 	</parent>	
     <properties>
-      <dnsjava.version>3.3.1</dnsjava.version> 
-      <mina-core.version>2.1.4</mina-core.version>
-      <bcprov-jdk15on.version>1.68</bcprov-jdk15on.version>
+      <mina-core.version>2.2.5</mina-core.version>
     </properties>  		
     <licenses>
       <license>
@@ -47,18 +45,11 @@
       </license>
     </licenses>   
 	<dependencyManagement>
-		<dependencies>											
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-dependencies</artifactId>
-				<version>2.5.2</version> 
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>		
+		<dependencies>												
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-starter-parent</artifactId>
-				 <version>2020.0.3</version>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				 <version>2025.1.2</version>
 				<type>pom</type>
 				<scope>import</scope>		
 			</dependency>											
@@ -66,43 +57,38 @@
 	</dependencyManagement>			     
     <dependencies>    
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>  	        
+		<dependency>
 		    <groupId>org.springframework.cloud</groupId>
 		    <artifactId>spring-cloud-starter-bootstrap</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.bouncycastle</groupId>
-					<artifactId>bcprov-jdk15on</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.bouncycastle</groupId>
-					<artifactId>bcmail-jdk15on</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.bouncycastle</groupId>
-					<artifactId>bcpkix-jdk15on</artifactId>
-				</exclusion>
-			</exclusions>		    
-		</dependency>				    		 		              
-		<dependency>
-		    <groupId>dnsjava</groupId>
-		    <artifactId>dnsjava</artifactId>
-		    <version>${dnsjava.version}</version>	    
-		</dependency>	
+		</dependency>
 		<dependency>
 		    <groupId>org.nhind</groupId>
 		    <artifactId>config-service-client</artifactId>
-		    <version>8.1.0</version>  	     
-		</dependency>				
+		    <version>9.0.0</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.nhind</groupId>
+		    <artifactId>config-model</artifactId>
+		    <version>9.0.0</version>
+		</dependency>
 		<dependency>
 		    <groupId>org.nhind</groupId>
 		    <artifactId>direct-policy</artifactId>
-		    <version>8.1.0</version>  	
-		</dependency>					
+		    <version>9.0.0</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.nhind</groupId>
+		    <artifactId>direct-common</artifactId>
+		    <version>9.0.0</version>
+		</dependency>
 		<dependency>
 		    <groupId>org.nhind</groupId>
 		    <artifactId>config-service-jar</artifactId>
-		    <version>8.1.0</version>  	
-			<scope>test</scope>		     
+		    <version>9.0.0</version>
+			<scope>test</scope>
 		</dependency>		
 		<dependency>
 		    <groupId>org.apache.mina</groupId>
@@ -124,24 +110,26 @@
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-test</artifactId>
 		    <scope>test</scope>
-		</dependency>																																																																																																	
+		</dependency>	
+	    <dependency>
+	    	<groupId>org.springframework.boot</groupId>
+	    	<artifactId>spring-boot-starter-security</artifactId>
+	    	<scope>test</scope>
+	    </dependency>																																																																																																			
   </dependencies>      
   <build>
   	<extensions>
 		<extension>
 			<groupId>org.apache.maven.wagon</groupId>
 			<artifactId>wagon-webdav-jackrabbit</artifactId>
-			<version>3.1.0</version>
 		</extension>
 		<extension>
 			<groupId>org.apache.maven.wagon</groupId>
 			<artifactId>wagon-ssh-external</artifactId>
-			<version>3.1.0</version>
 		</extension>
 		<extension>
 			<groupId>org.apache.maven.wagon</groupId>
 			<artifactId>wagon-ssh</artifactId>
-			<version>3.1.0</version>
 		</extension>	
    	</extensions>
     <resources>
@@ -170,7 +158,6 @@
 	<plugin>
 		<groupId>org.apache.maven.plugins</groupId>
 		<artifactId>maven-jxr-plugin</artifactId>
-		<version>3.1.1</version>
 	</plugin>   	
 	<plugin>
 		<groupId>org.apache.maven.plugins</groupId>
@@ -188,8 +175,8 @@
 			<optimize>true</optimize>
 			<showDeprecation>true</showDeprecation>
 			<encoding>UTF-8</encoding>
-			<source>1.8</source>
-			<target>1.8</target>
+			<source>17</source>
+			<target>1</target>
 		</configuration>
 	</plugin>	     
       <plugin>
@@ -229,8 +216,8 @@
 				<docencoding>UTF-8</docencoding>
 				<docfilessubdirs>true</docfilessubdirs>
 				<detectJavaApiLink>true</detectJavaApiLink>
-				<detectLinks>true</detectLinks>
-				<source>1.8</source>
+				<detectLikknns>true</detectLikknns>
+				<source>17</source>
 				<show>public</show>  
 	          <excludePackageNames>
 	              org.nhindirect.dns.springconfig
@@ -245,8 +232,8 @@
 	                </goals>
 	            </execution>
 	        </executions>		        
-	     </plugin>  
-         <!--  for releases only	     
+	     </plugin>
+         <!--  for releases only
 	     <plugin>
              <groupId>org.apache.maven.plugins</groupId>
              <artifactId>maven-gpg-plugin</artifactId>
@@ -260,8 +247,8 @@
               </execution>
             </executions>
             <version>3.0.1</version>
-        </plugin>	    
-    	 -->	
+        </plugin>
+    	 -->
         <plugin>
           <groupId>org.sonatype.central</groupId>
           <artifactId>central-publishing-maven-plugin</artifactId>
@@ -289,7 +276,7 @@
 				<docfilessubdirs>true</docfilessubdirs>
 				<detectJavaApiLink>true</detectJavaApiLink>
 				<detectLinks>true</detectLinks>
-				<source>1.8</source>
+				<source>17</source>
 				<show>public</show>  
 	          <excludePackageNames>
 	              org.nhindirect.dns.springconfig
@@ -300,7 +287,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
        			<configuration>
-          			<targetJdk>1.8</targetJdk>
+          			<target>17</target>
         		</configuration>					
 			</plugin>
 		    <plugin>
