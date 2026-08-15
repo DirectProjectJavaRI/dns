@@ -1,3 +1,7 @@
+---
+title: Overview
+---
+
 # Overview
 
 The DNS services implement a simple authoritative only DNS server for hosting DNS records for a Direct messaging domain. It is intentionally tuned to handle only certain type of DNS records including CERT type records as defined by the DirectProfject [specification](http://wiki.directproject.org/w/images/e/e6/Applicability_Statement_for_Secure_Health_Transport_v1.2.pdf).
@@ -11,9 +15,9 @@ The Direct Project DNS services are not intended to be a one stop shop for all D
 
 This document describes how to implement and configure the Direct Project Java DNS server for certificate distribution.
 
-* [Deployment Guide](DepGuide) - This section describes how deploy and configure the DNS services.
+* [Deployment Guide](dep-guide) - This section describes how deploy and configure the DNS services.
 
 
 Configuration is broken into two logical part: configuring the DNS specific protocol parameters and configuring/managing DNS records. The latter configuration may be dependent on the DNS hosting solution of the primary domain name.
-* [DNS Record Configuration](DNSRecConfig)
-* [GoDaddy Domain Hosting](GoDaddy)
+* [DNS Record Configuration](dns-rec-config)
+* [GoDaddy Domain Hosting](godaddy)

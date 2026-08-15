@@ -1,3 +1,7 @@
+---
+title: DNS Record Configuration
+---
+
 # DNS Record Configuration
 
 The primary purpose of the DNS service is to respond to DNS queries with appropriate DNS record responses. By design, the DNS service can store any type of DNS record defined by the DNS RFC, however it is tuned only to respond to a few types of records.
