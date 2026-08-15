@@ -1,3 +1,7 @@
+---
+title: DNS Record Configuration
+---
+
 # DNS Record Configuration
 
 The primary purpose of the DNS service is to respond to DNS queries with appropriate DNS record responses. By design, the DNS service can store any type of DNS record defined by the DNS RFC, however it is tuned only to respond to a few types of records.
@@ -23,7 +27,7 @@ The Config Management console is command line tool for managing all configuratio
 
 The console connects to the Direct Project configuration service and manages records using the configuration service proxy module. Similar to the DNS server, the config manager uses an internal properties file to set default properties for connecting to the DirectProject configuration server.  These setting can be overridden by creating a file named *application.properties* in the ConfigMgmtConsole directory and setting the following properties:
 
-* direct.config.service.url - The URL of the DirectProject configuration server.  Default value is  *http://localhost:8080/config-service*
+* direct.config.service.url - The URL of the DirectProject configuration server.  Default value is  `http://localhost:8080/config-service`
 * direct.webservices.security.basic.user.name: Username to authenticate to the DirectProject configuration server.  Default value is *admin*
 * direct.webservices.security.basic.user.password: Password to authenticate to the DirectProject configuration server.  Default value is *d1r3ct*
 

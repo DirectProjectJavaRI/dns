@@ -1,3 +1,7 @@
+---
+title: DNS Service Deployment
+---
+
 # DNS Service Deployment
 
 The DNS server is deployable on a number of different operating environments and can be launched either interactively (for debugging) or as a background service.
@@ -84,7 +88,7 @@ The DNS server uses an internal properties file to bootstrap its default setting
 
 The configuration in most cases does not need a lot of modification, however there a few settings that will need adjustment depending on your deployment.  The following table lists configurable properties that can be overridden:
 
-* direct.config.service.url - The URL of the DirectProject configuration server.  Default value is  *http://localhost:8080/config-service*
+* direct.config.service.url - The URL of the DirectProject configuration server.  Default value is  `http://localhost:8080/config-service`
 * direct.webservices.security.basic.user.name: Username to authenticate to the DirectProject configuration server.  Default value is *admin*
 * direct.webservices.security.basic.user.password: Password to authenticate to the DirectProject configuration server.  Default value is *d1r3ct*
 * direct.dns.binding.port - The port that the DNS server binds to for listening for DNS requests.  Default value is *53*

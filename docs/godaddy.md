@@ -1,3 +1,7 @@
+---
+title: Integration With GoDaddy
+---
+
 # Integration With GoDaddy
 
 [GoDaddy](http://www.godaddy.com/) is a popular domain hosting service. You can use your existing GoDaddy domain to host a Direct message domain. Typically you will create a sub domain/zone from your registered domain and configure GoDaddy to use your DNS server as the name server. The following links describe creating a sub domain from your existing domain and how to configure GoDaddy to use your name server with the sub domain.
