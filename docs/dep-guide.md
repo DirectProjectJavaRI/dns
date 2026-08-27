@@ -4,9 +4,40 @@ title: DNS Service Deployment
 
 # DNS Service Deployment
 
-The DNS server is deployable on a number of different operating environments and can be launched either interactively (for debugging) or as a background service.
+The DNS server is a standalone, authoritative-only DNS service. It answers DNS queries — most importantly the CERT record queries used for Direct certificate discovery — from the records managed in the Direct Project configuration service. It is assembled and packaged as a Spring Boot jar application and can be launched either interactively (for debugging) or as a background service.
 
-The DNS server are assembled and packaged as a SpringBoot jar application. In the Java RI stock assembly, the services are bundled using in the following directory structure.
+Two deployment models exist:
+
+* **Cloud Native deployment** — the only supported model starting with version 9.0.0. The DNS server is deployed as an individual Spring Boot micro-service alongside the other Direct micro-services.
+* **Legacy deployment** — supported only for version 8.1.x and earlier. The DNS server is deployed from the Direct Project stock assembly as a self-contained `DirectDNSServer` directory with its own `dnsServer` control script.
+
+## Cloud Native Deployment
+
+Starting with version 9.0.0, the DNS server is deployed the same way as every other Direct micro-service, as described in the [Cloud Native HISP Deployment Model](https://directprojectjavari.github.io/docs/direct-project-stock/cloud-native-deployment) guide. Refer to that guide for the full walkthrough — deploying binaries, the `service.sh` / `service.ps1` control scripts, the `conf/logback.xml` logging file, and overriding configuration with an `application.yml`. This section covers only what is specific to the DNS service.
+
+1. Create a directory named `dns` for the service, following the [Download Micro-service Binaries](https://directprojectjavari.github.io/docs/direct-project-stock/cloud-native-deployment#download-micro-service-binaries) step of the Cloud Native guide.
+2. Download [dns-sboot-9.0.0.jar](https://repo.maven.apache.org/maven2/org/nhind/dns-sboot/9.0.0/dns-sboot-9.0.0.jar) from Maven Central into that directory.
+3. Copy the `service.sh` (Unix/Linux/macOS) or `service.ps1` (Windows) template from the Cloud Native guide into the `dns` directory and replace the `<binary>` placeholder with `dns-sboot-9.0.0.jar`. Add a `conf/logback.xml` file as described in that guide.
+4. Start the service with `./service.sh start` (or `.\service.ps1 start`). Use `./service.sh console` to run it interactively for troubleshooting, and `./service.sh stop` to stop it.
+
+**Binding to port 53:** the DNS server listens on UDP/TCP port 53 by default, which is a privileged port on most operating systems. Either start the service with sufficient privileges to bind low ports (run as `root`, or grant the Java executable the `CAP_NET_BIND_SERVICE` capability on Linux), or set `direct.dns.binding.port` to a non-privileged port and forward port 53 to it.
+
+### Configuration
+
+The DNS service is configured with an `application.yml` file placed in the `dns` directory, the same as the other micro-services. The full set of configurable properties is documented in the [DNS Service configuration table](https://directprojectjavari.github.io/docs/direct-project-stock/cloud-native-deployment#dns-service) of the Cloud Native guide. The settings you are most likely to change are:
+
+* `direct.config.service.url` — URL of the configuration service API. Default `http://localhost:8082/`.
+* `direct.webservices.security.basic.user.name` / `direct.webservices.security.basic.user.password` — credentials used to authenticate to the configuration service. Defaults `admin` / `d1r3ct;`.
+* `direct.dns.binding.port` — the port the DNS server binds to for listening for DNS requests. Default `53`.
+* `direct.dns.binding.address` — the local IP address the DNS server binds to. Default `0.0.0.0` (all interfaces).
+* `direct.dns.binding.maxReconnectAttempts` — number of times the server attempts to re-bind its listener socket after an I/O failure before giving up. Default `10`.
+* `direct.dns.certPolicyName` — the name of a policy used to filter certificate query responses. This is generally used for configuring single-use certificates. Default is empty (no filtering).
+
+## Legacy Deployment (version 8.1.x and earlier)
+
+> **Note:** This deployment model applies only to version 8.1.x and earlier. For version 9.0.0 and later, use the Cloud Native deployment described above.
+
+The DNS server is deployable on a number of different operating environments and can be launched either interactively (for debugging) or as a background service. In the Java RI stock assembly, the service is bundled using the following directory structure:
 
 ```
   +-- DirectDNSServer
@@ -15,7 +46,7 @@ The DNS server are assembled and packaged as a SpringBoot jar application. In th
 
 The conf directory contains a logback xml file used for configuring logging options.
 
-## Service Installation
+### Service Installation
 
 To install, first download the Direct Project stock assembly and unpack the contents into the desired location using your archiver of choice (tar, WinZip, WinRar, File Roller, etc).
 
@@ -73,7 +104,7 @@ Conversely you can stop the service by running the command:
 service DirectDNSServer stop
 ```
 
-**Running Interactively**
+### Running Interactively
 
 For debugging or troubleshooting purposes, you may need to run the service interactively. Running interactively is the same across all platforms.
 
@@ -82,7 +113,7 @@ For debugging or troubleshooting purposes, you may need to run the service inter
 
 The service will output all logging to the current console and the log file. To terminate the interactive service, simply press CTRL+C (Control C).
 
-** Service Deployment Configuration
+### Service Deployment Configuration
 
 The DNS server uses an internal properties file to bootstrap its default settings.  Settings can be overridden by externalizing the properties using SpringBoot [external configuration](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html) options.  The simplest way is to create an file named *application.properties* in the DirectDNSServer directory and set the necessary properties that you wish to override.  The sever also supports connecting to a SpringCloud configuration server which can be configured either using an application.properties file or environment parameters.
 
@@ -95,6 +126,6 @@ The configuration in most cases does not need a lot of modification, however the
 * direct.dns.binding.address - The local IP address that the DNS server binds to for listening for DNS requests.  Default value is *0.0.0.0*
 * direct.dns.certPolicyName - The name of a policy used to filter certificate query responses.  This is generally used for configuring single use certificates.  Default value is empty.
 
-## Service Logging
+### Service Logging
 
 Logging is configured in the DirectDNSServer/conf/logback.xml file and by default are written to the file DirectDNSServer/log/dns-server.log; by default the file uses a rolling log scheme.  Changes can be made by updating the logback.xml file.
