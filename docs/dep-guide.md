@@ -31,7 +31,7 @@ The DNS service is configured with an `application.yml` file placed in the `dns`
 * `direct.dns.binding.port` — the port the DNS server binds to for listening for DNS requests. Default `53`.
 * `direct.dns.binding.address` — the local IP address the DNS server binds to. Default `0.0.0.0` (all interfaces).
 * `direct.dns.binding.maxReconnectAttempts` — number of times the server attempts to re-bind its listener socket after an I/O failure before giving up. Default `10`.
-* `direct.dns.certPolicyName` — the name of a policy used to filter certificate query responses. This is generally used for configuring single-use certificates. Default is empty (no filtering).
+* `direct.dns.certPolicyName` — the name of a policy (defined in the configuration service via the [Policy Enablement module](https://directprojectjavari.github.io/direct-policy/)) used to filter the certificates the server returns for CERT record queries. This is generally used for single-use certificate deployments, where you only want to publish the key-encipherment certificate over DNS. See [Single-Use Certificates](https://directprojectjavari.github.io/docs/direct-project-stock/single-use-certs#dns-certificate-distribution) in the Bare Metal deployment guide for the background on why this is needed, and [Policy Enforcement](dns-rec-config#policy-enforcement) for the DNS-specific configuration steps. Default is empty (no filtering).
 
 ## Legacy Deployment (version 8.1.x and earlier)
 
@@ -124,7 +124,7 @@ The configuration in most cases does not need a lot of modification, however the
 * direct.webservices.security.basic.user.password: Password to authenticate to the DirectProject configuration server.  Default value is *d1r3ct*
 * direct.dns.binding.port - The port that the DNS server binds to for listening for DNS requests.  Default value is *53*
 * direct.dns.binding.address - The local IP address that the DNS server binds to for listening for DNS requests.  Default value is *0.0.0.0*
-* direct.dns.certPolicyName - The name of a policy used to filter certificate query responses.  This is generally used for configuring single use certificates.  Default value is empty.
+* direct.dns.certPolicyName - The name of a policy used to filter certificate query responses.  This is generally used for configuring single use certificates; see [Single-Use Certificates](https://directprojectjavari.github.io/docs/direct-project-stock/single-use-certs#dns-certificate-distribution) for the background and [Policy Enforcement](dns-rec-config#policy-enforcement) for the configuration steps.  Default value is empty.
 
 ### Service Logging
 
