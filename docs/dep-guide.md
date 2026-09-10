@@ -13,18 +13,18 @@ Two deployment models exist:
 
 ## Cloud Native Deployment
 
-Starting with version 9.0.0, the DNS server is deployed the same way as every other Direct micro-service, as described in the [Cloud Native HISP Deployment Model](https://directprojectjavari.github.io/docs/direct-project-stock/cloud-native-deployment) guide. Refer to that guide for the full walkthrough — deploying binaries, the `service.sh` / `service.ps1` control scripts, the `conf/logback.xml` logging file, and overriding configuration with an `application.yml`. This section covers only what is specific to the DNS service.
+Starting with version 9.0.0, the DNS server is deployed the same way as every other Direct micro-service. See the [Cloud Native HISP Deployment Model](https://directprojectjavari.github.io/docs/direct-project-stock/cloud-native-deployment) for an overview of the deployment models. The [Machine Deployment (Fat Jars)](https://directprojectjavari.github.io/docs/direct-project-stock/cloud-native-machine-deployment) guide covers the full walkthrough — deploying binaries, the `service.sh` / `service.ps1` control scripts, the `conf/logback.xml` logging file, and overriding configuration with an `application.yml` — and the [Kubernetes Deployment](https://directprojectjavari.github.io/docs/direct-project-stock/cloud-native-kubernetes-deployment) guide covers running it as a container. This section covers only what is specific to the DNS service.
 
-1. Create a directory named `dns` for the service, following the [Download Micro-service Binaries](https://directprojectjavari.github.io/docs/direct-project-stock/cloud-native-deployment#download-micro-service-binaries) step of the Cloud Native guide.
+1. Create a directory named `dns` for the service, following the [Download Micro-service Binaries](https://directprojectjavari.github.io/docs/direct-project-stock/cloud-native-machine-deployment#download-micro-service-binaries) step of the Machine Deployment guide.
 2. Download [dns-sboot-9.0.0.jar](https://repo.maven.apache.org/maven2/org/nhind/dns-sboot/9.0.0/dns-sboot-9.0.0.jar) from Maven Central into that directory.
-3. Copy the `service.sh` (Unix/Linux/macOS) or `service.ps1` (Windows) template from the Cloud Native guide into the `dns` directory and replace the `<binary>` placeholder with `dns-sboot-9.0.0.jar`. Add a `conf/logback.xml` file as described in that guide.
+3. Copy the `service.sh` (Unix/Linux/macOS) or `service.ps1` (Windows) template from the Machine Deployment guide into the `dns` directory and replace the `<binary>` placeholder with `dns-sboot-9.0.0.jar`. Add a `conf/logback.xml` file as described in that guide.
 4. Start the service with `./service.sh start` (or `.\service.ps1 start`). Use `./service.sh console` to run it interactively for troubleshooting, and `./service.sh stop` to stop it.
 
 **Binding to port 53:** the DNS server listens on UDP/TCP port 53 by default, which is a privileged port on most operating systems. Either start the service with sufficient privileges to bind low ports (run as `root`, or grant the Java executable the `CAP_NET_BIND_SERVICE` capability on Linux), or set `direct.dns.binding.port` to a non-privileged port and forward port 53 to it.
 
 ### Configuration
 
-The DNS service is configured with an `application.yml` file placed in the `dns` directory, the same as the other micro-services. The full set of configurable properties is documented in the [DNS Service configuration table](https://directprojectjavari.github.io/docs/direct-project-stock/cloud-native-deployment#dns-service) of the Cloud Native guide. The settings you are most likely to change are:
+The DNS service is configured with an `application.yml` file placed in the `dns` directory, the same as the other micro-services. The full set of configurable properties is documented in the [DNS Service configuration table](https://directprojectjavari.github.io/docs/direct-project-stock/service-configuration#dns-service) of the Cloud Native guide. The settings you are most likely to change are:
 
 * `direct.config.service.url` — URL of the configuration service API. Default `http://localhost:8082/`.
 * `direct.webservices.security.basic.user.name` / `direct.webservices.security.basic.user.password` — credentials used to authenticate to the configuration service. Defaults `admin` / `d1r3ct;`.
